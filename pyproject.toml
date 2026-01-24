@@ -8,3 +8,6 @@ dependencies = [
     "fastapi[standard]>=0.128.0",
     "pytest>=9.0.2",
 ]
+
+[tool.uv]
+exclude-newer = "2 weeks"

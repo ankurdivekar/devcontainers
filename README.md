@@ -252,6 +252,10 @@ The following hooks are currently configured:
   - Scans staged changes for secrets (API keys, tokens, passwords, etc.) before they are committed.
   - Blocks commits that appear to contain sensitive values, helping you avoid leaking secrets to Git history or remote repositories.
 
+- **bandit** (from `PyCQA/bandit`)
+  - Analyzes Python code for common security issues and insecure patterns (e.g., unsafe function usage, hard-coded credentials).
+  - Fails the commit when high-confidence security findings are detected so you can fix them before merging.
+
 ### Using Pre-commit Locally
 
 To enable these hooks in your local environment:

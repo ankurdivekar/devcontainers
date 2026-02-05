@@ -221,6 +221,50 @@ docker push myregistry/fastapi-app:v1.0
 docker-compose up -d
 ```
 
+## Pre-commit Hooks
+
+This template includes a pre-commit configuration (see `.pre-commit-config.yaml`) to catch issues early and keep the project consistent. Pre-commit hooks run automatically on each commit (after you install them with `pre-commit install`) and will either fix problems for you or block the commit with a clear message.
+
+At a high level, pre-commit hooks help you:
+- Enforce consistent formatting and linting before code is committed
+- Keep your dependency lock file in sync with `pyproject.toml`
+- Prevent accidental commits of secrets or other sensitive information
+
+### Configured Hooks
+
+The following hooks are currently configured:
+
+- **sync-with-uv** (from `tsvikas/sync-with-uv`)
+  - Ensures that your `uv.lock` file is synchronized with `pyproject.toml` whenever you change dependencies.
+  - Helps prevent situations where production builds use stale dependency information.
+
+- **ruff-check** (from `astral-sh/ruff-pre-commit`)
+  - Runs the Ruff linter against your Python code.
+  - Uses `--fix` to automatically apply safe fixes where possible.
+  - Extends selection with `I` to enforce import sorting and organization.
+  - Fails the commit if style or lint violations remain after automatic fixes.
+
+- **ruff-format** (from `astral-sh/ruff-pre-commit`)
+  - Formats your Python code with Ruff's formatter to keep a consistent style across the codebase.
+  - Reduces noise in pull requests by standardizing formatting automatically.
+
+- **gitleaks** (from `gitleaks/gitleaks`)
+  - Scans staged changes for secrets (API keys, tokens, passwords, etc.) before they are committed.
+  - Blocks commits that appear to contain sensitive values, helping you avoid leaking secrets to Git history or remote repositories.
+
+### Using Pre-commit Locally
+
+To enable these hooks in your local environment:
+
+1. Install `pre-commit` (globally or in your environment), for example:
+   - `uv tool install pre-commit` **or** `pip install pre-commit`
+2. From the repository root, run:
+   - `pre-commit install`
+3. (Optional) Run all hooks against the entire repo once:
+   - `pre-commit run --all-files`
+
+After installation, the hooks will run automatically on `git commit`. If a hook fails, fix the reported issues (or let the hook apply fixes), then re-stage your changes and try committing again.
+
 ## Customization
 
 ### Using a Different Python Version

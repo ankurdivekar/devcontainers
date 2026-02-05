@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/tsvikas/sync-with-uv
+    rev: v0.1.0
+    hooks:
+      - id: sync-with-uv
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version pinned to current pre-commit mirror
+    rev: v0.15.0
+    hooks:
+      # Run Ruff linter
+      - id: ruff-check
+        args: ["--fix", "--extend-select", "I"]
+      # Run Ruff formatter
+      - id: ruff-format
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks

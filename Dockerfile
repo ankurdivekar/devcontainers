@@ -25,15 +25,20 @@ CMD ["uv", "run", "fastapi", "dev", "app/main.py", "--host", "0.0.0.0"]
 # Production stage
 FROM base AS production
 
-# Install only production dependencies
+# Create non-root user and ensure ownership of the project directory
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+
+# Run dependency installation and the app as non-root
+USER appuser
+
+# Store the project environment under the user's home directory
+ENV UV_PROJECT_ENVIRONMENT=/home/appuser/.venv
+
+# Install only production dependencies into the user-owned environment
 RUN uv sync --no-dev
 
 # Copy application code
 COPY ./app ./app
-
-# Create non-root user
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
 
 # Run with production server
 CMD ["uv", "run", "fastapi", "run", "app/main.py", "--host", "0.0.0.0"]
